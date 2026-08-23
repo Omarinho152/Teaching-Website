@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FR.01 — Cours de Français</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEBE2;
+    --panel:#F8F6F0;
+    --panel-dim:#E4E1D6;
+    --ink:#1B1A17;
+    --ink-soft:#5C5A52;
+    --line:#C6C2B3;
+    --accent:#FF4310;
+    --accent-ink:#FFF3EE;
+    --sage:#5E6B4C;
+    --sage-bg:#E4E8D9;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  a{color:inherit;}
+  .wrap, .wrap-wide{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  .wrap-wide{max-width:1280px;}
+  /* corner dots — device-panel signature */
+  .panel{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:0 1px 3px rgba(27,26,23,0.05);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .panel:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px -16px rgba(27,26,23,0.35);
+  }
+  .photo-frame{
+    box-shadow:0 1px 3px rgba(27,26,23,0.05);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .photo-frame:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 24px -16px rgba(27,26,23,0.35);
+  }
+  a:focus-visible, button:focus-visible, .btn:focus-visible, iframe:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .panel::before,.panel::after{
+    content:"";
+    position:absolute;
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--line);
+  }
+  .panel::before{top:8px;left:8px;}
+  .panel::after{top:8px;right:8px;}
+
+  /* promo banner */
+  .promo-banner{
+    background:var(--ink);
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .promo-track{
+    display:inline-flex;
+    padding:9px 0;
+    animation:promo-scroll 16s linear infinite;
+  }
+  .promo-item{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.04em;
+    color:var(--accent-ink);
+    padding:0 28px;
+    display:inline-flex;align-items:center;
+  }
+  @keyframes promo-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .promo-track{animation:none;}
+  }
+
+  /* nav */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .navbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 0;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:500;
+    font-size:14px;
+    letter-spacing:0.02em;
+  }
+  .brand-mark{
+    width:26px;height:26px;
+    background:var(--ink);
+    border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--bg);
+    font-size:11px;font-weight:700;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  nav{position:relative;}
+  nav ul{
+    display:flex;gap:28px;list-style:none;margin:0;padding:0;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+  }
+  nav a{text-decoration:none;color:var(--ink-soft);transition:color .15s;}
+  nav a:hover{color:var(--ink);}
+  .nav-toggle{
+    display:none;
+    flex-direction:column;justify-content:center;gap:4px;
+    width:32px;height:32px;
+    background:transparent;border:1px solid var(--ink);border-radius:var(--radius);
+    cursor:pointer;padding:0;
+  }
+  .nav-toggle span{display:block;width:16px;height:1.5px;background:var(--ink);margin:0 auto;}
+
+  /* hero */
+  .hero{
+    padding:88px 0 64px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+    align-items:center;
+  }
+  .hero-copy{
+    display:flex;flex-direction:column;align-items:center;
+    text-align:center;
+  }
+  .hero h1{
+    font-size:clamp(40px,5.4vw,64px);
+    line-height:1.02;
+  }
+  .hero h1 span{color:var(--accent);}
+  .hero p.lede{
+    margin:22px auto 32px;
+    font-size:17px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:0.02em;
+    padding:13px 20px;
+    border-radius:var(--radius);
+    border:1px solid var(--ink);
+    text-decoration:none;
+    display:inline-block;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .btn-solid{background:var(--ink);color:var(--bg);}
+  .btn-solid:hover{background:var(--accent);border-color:var(--accent);}
+  .btn-ghost{background:transparent;color:var(--ink);}
+  .btn-ghost:hover{background:var(--panel);}
+  .btn:active{transform:scale(0.97);}
+
+  /* dial signature */
+  .dial-panel{padding:32px;text-align:center;}
+  .dial-head{margin-bottom:20px;}
+  .dial-head h3{font-size:19px;margin-top:6px;}
+  .dial-level-nav{display:flex;align-items:center;gap:12px;margin-top:18px;}
+  .dial-caption{margin:0;font-size:12px;color:var(--ink-soft);flex:1;text-align:left;}
+  .dial-caption b{color:var(--ink);}
+  .dial-arrow{
+    flex-shrink:0;width:28px;height:28px;
+    border:1px solid var(--ink);background:transparent;border-radius:50%;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1;cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .dial-arrow:hover{background:var(--ink);color:var(--bg);}
+  .dial-desc{
+    margin-top:18px;padding:16px 18px;text-align:left;
+    background:var(--panel-dim);border:1px solid var(--line);border-radius:var(--radius);
+    min-height:96px;
+  }
+  .dial-desc-level{
+    display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;
+    color:var(--accent);margin-bottom:6px;letter-spacing:0.02em;
+  }
+  .dial-desc p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink);}
+
+  /* section scaffolding */
+  section{padding:72px 0;border-top:1px solid var(--line);}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:36px;gap:24px;flex-wrap:wrap;
+  }
+  .section-head h2{font-size:30px;}
+  .section-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);}
+
+  /* about */
+  .about-grid{
+    display:grid;grid-template-columns:220px 1fr;gap:40px;align-items:start;
+  }
+  .photo-frame{
+    aspect-ratio:3/4;
+    background:var(--panel-dim);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .photo-frame img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transform:scale(1.8);
+    transform-origin:50% 78%;
+    transition:transform .4s ease;
+  }
+  .photo-frame:hover img{transform:scale(1.87);}
+  .photo-frame .placeholder-text{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;color:var(--ink-soft);
+    text-align:center;padding:16px;
+  }
+  .about-body p{font-size:16px;line-height:1.7;color:var(--ink);margin:0 0 16px;}
+  .about-body p:last-child{margin-bottom:0;}
+  .spec-list{
+    margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  .spec-item{background:var(--panel);padding:14px 16px;}
+  .spec-item .k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.06em;}
+  .spec-item .v{font-size:14px;margin-top:4px;font-weight:500;}
+
+  /* classes */
+  .class-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  }
+  .class-card{padding:26px;}
+  .class-tag{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    padding:4px 10px;border-radius:20px;letter-spacing:0.04em;text-transform:uppercase;
+  }
+  .tag-group{background:var(--sage-bg);color:var(--sage);}
+  .tag-private{background:var(--accent-ink);color:var(--accent);}
+  .class-card h3{font-size:22px;margin:14px 0 6px;}
+  .class-card .price{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-soft);margin-bottom:16px;}
+  .class-card .price b{color:var(--ink);font-size:19px;}
+  .class-specs{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+  .class-specs div{
+    display:flex;justify-content:space-between;font-size:13px;
+    padding:9px 0;border-top:1px dashed var(--line);
+  }
+  .class-specs .k{color:var(--ink-soft);}
+  .class-specs .v{font-weight:500;}
+
+  /* booking */
+  .book-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:20px;align-items:stretch;}
+  .book-info{padding:28px;}
+  .book-info p{font-size:15px;line-height:1.7;color:var(--ink-soft);margin:14px 0 0;}
+  .steps{margin-top:20px;display:flex;flex-direction:column;gap:14px;}
+  .step{display:flex;gap:12px;align-items:flex-start;}
+  .step-num{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+    width:22px;height:22px;border-radius:50%;border:1px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .step-text{font-size:14px;line-height:1.5;}
+  .calendly-frame{
+    padding:0;overflow:hidden;min-height:720px;display:flex;align-items:center;justify-content:center;
+  }
+  .calendly-placeholder{
+    text-align:center;padding:40px 24px;font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;color:var(--ink-soft);line-height:1.8;
+  }
+
+  /* shop */
+  .shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .shop-card{padding:20px;display:flex;flex-direction:column;height:100%;}
+  .shop-level{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;
+    color:var(--accent);
+  }
+  .shop-card h4{font-size:15px;margin:8px 0 6px;}
+  .shop-card p{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 16px;flex-grow:1;}
+  .shop-price{font-family:'IBM Plex Mono',monospace;font-size:16px;margin-bottom:12px;}
+  .shop-buy{
+    text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    padding:11px;border:1px solid var(--ink);border-radius:var(--radius);
+    text-decoration:none;transition:background .15s;
+  }
+  .shop-buy:hover{background:var(--ink);color:var(--bg);}
+
+  /* testimonials */
+  .testi-carousel{display:flex;align-items:center;gap:16px;}
+  .testi-track-wrap{flex:1;overflow:hidden;}
+  .testi-track{display:flex;transition:transform .35s ease;}
+  .testi-card{
+    flex:0 0 100%;
+    padding:44px 56px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    min-height:150px;
+  }
+  .testi-quote{
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:19px;line-height:1.5;
+    color:var(--ink);max-width:56ch;
+  }
+  .testi-name{color:var(--ink-soft);font-size:12.5px;}
+  .testi-arrow{width:36px;height:36px;font-size:15px;}
+  .testi-dots{display:flex;justify-content:center;gap:8px;margin-top:24px;}
+  .testi-dot{
+    width:8px;height:8px;border-radius:50%;border:1px solid var(--ink-soft);
+    background:transparent;padding:0;cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .testi-dot.active{background:var(--accent);border-color:var(--accent);}
+
+  footer{border-top:1px solid var(--line);padding:36px 0;}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .footer-row .mono{font-size:12px;color:var(--ink-soft);}
+
+  @media (max-width:820px){
+    .hero{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr;}
+    .photo-frame{max-width:220px;}
+    .class-grid,.book-grid{grid-template-columns:1fr;}
+    .calendly-frame{min-height:560px;}
+    .shop-grid{grid-template-columns:1fr 1fr;}
+    .spec-list{grid-template-columns:1fr;}
+    .testi-card{padding:32px 20px;}
+    .testi-quote{font-size:17px;}
+    nav ul{
+      display:none;
+      position:absolute;top:46px;right:0;left:auto;
+      flex-direction:column;gap:0;min-width:200px;
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      padding:6px 18px;
+    }
+    nav ul.open{display:flex;}
+    nav ul li{padding:12px 0;border-top:1px dashed var(--line);}
+    nav ul li:first-child{border-top:none;}
+    .nav-toggle{display:flex;}
+  }
+</style>
+</head>
+<body>
+
+<div class="promo-banner">
+  <div class="promo-track">
+    <span class="promo-item">✦ Founding discount now available</span>
+    <span class="promo-item">✦ Founding discount now available</span>
+    <span class="promo-item">✦ Founding discount now available</span>
+    <span class="promo-item">✦ Founding discount now available</span>
+    <span class="promo-item" aria-hidden="true">✦ Founding discount now available</span>
+    <span class="promo-item" aria-hidden="true">✦ Founding discount now available</span>
+    <span class="promo-item" aria-hidden="true">✦ Founding discount now available</span>
+    <span class="promo-item" aria-hidden="true">✦ Founding discount now available</span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap navbar">
+    <div class="brand"><span class="brand-mark">FR</span> COURS&nbsp;DE&nbsp;FRANÇAIS — MODEL&nbsp;FR.01</div>
+    <nav>
+      <ul id="navMenu">
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#classes">Cours</a></li>
+        <li><a href="#book">Réserver</a></li>
+        <li><a href="#delf">Préparation DELF</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="border-top:none;padding-top:88px;">
+  <div class="wrap" style="display:contents;">
+    <div class="hero-copy">
+      <p class="eyebrow">Native speaker · basé en Belgique depuis 2008</p>
+      <h1>Learn French<br>the way it's<br><span>actually spoken.</span></h1>
+      <p class="lede">One-to-one and small group lessons with a native French speaker and experienced teacher. Structured around the CEFR framework — built around how you'll actually speak, not just how it's written down.</p>
+      <div class="cta-row">
+        <a href="#book" class="btn btn-solid">Book a class</a>
+        <a href="#delf" class="btn btn-ghost">DELF exam prep →</a>
+      </div>
+    </div>
+
+    <div class="panel dial-panel">
+      <div class="dial-head">
+        <span class="eyebrow">CEFR scale</span>
+        <h3>The European standard for French level</h3>
+      </div>
+      <svg viewBox="0 0 260 260" width="100%" style="max-width:320px;" id="cefr-dial">
+        <circle cx="130" cy="130" r="112" fill="none" stroke="#C6C2B3" stroke-width="1"/>
+        <g font-family="IBM Plex Mono" font-size="12" fill="#5C5A52" style="cursor:pointer;">
+          <text class="dial-tick" data-angle="0"   data-label="A1" x="130"   y="40.7" text-anchor="middle">A1</text>
+          <text class="dial-tick" data-angle="60"  data-label="A2" x="211.7" y="87.9" text-anchor="middle">A2</text>
+          <text class="dial-tick" data-angle="120" data-label="B1" x="211.7" y="182.2" text-anchor="middle">B1</text>
+          <text class="dial-tick" data-angle="180" data-label="B2" x="130"   y="229.3" text-anchor="middle">B2</text>
+          <text class="dial-tick" data-angle="240" data-label="C1" x="48.3"  y="182.2" text-anchor="middle">C1</text>
+          <text class="dial-tick" data-angle="300" data-label="C2" x="48.3"  y="92.9" text-anchor="middle">C2</text>
+        </g>
+        <line id="dial-needle" x1="130" y1="130" x2="130" y2="45" stroke="#FF4310" stroke-width="3" stroke-linecap="round" transform="rotate(120 130 130)" style="transition:transform .12s linear;"/>
+        <circle cx="130" cy="130" r="40" fill="#1B1A17"/>
+        <text id="dial-label" x="130" y="136" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="16" fill="#F8F6F0">B1</text>
+      </svg>
+
+      <div class="dial-level-nav">
+        <button class="dial-arrow" id="dialPrev" aria-label="Previous level" type="button">←</button>
+        <p class="dial-caption">Curriculum tracks the <b>CEFR scale</b>, A1 through C2 — hover the dial or use the arrows.</p>
+        <button class="dial-arrow" id="dialNext" aria-label="Next level" type="button">→</button>
+      </div>
+
+      <div class="dial-desc">
+        <span class="dial-desc-level" id="dialDescLevel">B1 — Intermediate</span>
+        <p id="dialDescText">Hold your own in most everyday situations, describe experiences and plans, and follow the main points of clear speech.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>À propos</h2>
+      <span class="section-num mono">01 / ENSEIGNANT</span>
+    </div>
+    <div class="about-grid">
+      <div class="photo-frame"><img src="omar-photo.jpg" alt="Omar, French teacher"></div>
+      <div class="about-body">
+        <!-- EDIT: swap "Omar" for whatever name/handle you want on the public site -->
+        <p><b>Bonjour, je m'appelle Omar.</b> French is my first language — I've lived in Belgium since 2008, so it's not just a language I studied, it's the one I think, argue and joke in.</p>
+        <p>Before turning to French teaching, I spent several years teaching maths and physics at GCSE and A-level, so lesson planning, pacing and explaining things three different ways until one clicks is already second nature. I bring that same structure to French: clear levels, clear goals, and homework that's actually useful.</p>
+        <p>I focus on getting students speaking early rather than drilling grammar in isolation, while still being rigorous about the fundamentals — verb conjugation, gender, the sounds that don't exist in English — that trip most learners up.</p>
+        <div class="spec-list">
+          <div class="spec-item"><div class="k">Native language</div><div class="v">French</div></div>
+          <div class="spec-item"><div class="k">Based in</div><div class="v">Belgium, since 2008</div></div>
+          <div class="spec-item"><div class="k">Also teaches</div><div class="v">Maths & Physics (GCSE/A-level)</div></div>
+          <div class="spec-item"><div class="k">Levels covered</div><div class="v">A1 → C2</div></div>
+          <div class="spec-item"><div class="k">Format</div><div class="v">Online & in person</div></div>
+          <div class="spec-item"><div class="k">Exam focus</div><div class="v">DELF / DALF</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="classes">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Les cours</h2>
+      <span class="section-num mono">02 / FORMATS</span>
+    </div>
+    <div class="class-grid">
+      <div class="panel class-card">
+        <span class="class-tag tag-group">Groupe</span>
+        <h3>Small group lessons</h3>
+        <p class="price"><b>£18</b> / person / hour</p>
+        <div class="class-specs">
+          <div><span class="k">Group size</span><span class="v">4–6 students</span></div>
+          <div><span class="k">Cadence</span><span class="v">Weekly, 90 min</span></div>
+          <div><span class="k">Levels</span><span class="v">A1 – B2</span></div>
+          <div><span class="k">Best for</span><span class="v">Friends learning together, steady progress</span></div>
+        </div>
+        <a href="#book" class="btn btn-ghost" style="text-align:center;">Book a group slot</a>
+      </div>
+      <div class="panel class-card">
+        <span class="class-tag tag-private">Privé</span>
+        <h3>One-to-one lessons</h3>
+        <p class="price"><b>£40</b> / hour</p>
+        <div class="class-specs">
+          <div><span class="k">Group size</span><span class="v">Just you</span></div>
+          <div><span class="k">Cadence</span><span class="v">Flexible scheduling</span></div>
+          <div><span class="k">Levels</span><span class="v">A1 – C2</span></div>
+          <div><span class="k">Best for</span><span class="v">Exam prep, targeted weak spots, fast pace</span></div>
+        </div>
+        <a href="#book" class="btn btn-ghost" style="text-align:center;">Book one-to-one</a>
+      </div>
+    </div>
+    <p class="mono" style="margin-top:20px;font-size:12.5px;color:var(--ink-soft);">First class is free when you're referred by a friend or a returning student — one trial per person.</p>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap-wide">
+    <div class="section-head">
+      <h2>Réserver un cours</h2>
+      <span class="section-num mono">03 / CALENDRIER</span>
+    </div>
+    <div class="book-grid">
+      <div class="panel book-info">
+        <h3 style="font-size:18px;">How booking works</h3>
+        <div class="steps">
+          <div class="step"><span class="step-num mono">1</span><span class="step-text">Pick an open slot in the calendar — it syncs live to my availability, so nothing gets double-booked.</span></div>
+          <div class="step"><span class="step-num mono">2</span><span class="step-text">Confirm your details. The class is added straight to my calendar automatically.</span></div>
+          <div class="step"><span class="step-num mono">3</span><span class="step-text">You get an email with the video call link and a calendar invite — no extra step from me.</span></div>
+        </div>
+        <p>This panel is wired to <b>cal.com</b>, so it handles the calendar sync and sends the meeting link the moment someone books — nothing for me to do manually.</p>
+      </div>
+      <div class="panel calendly-frame">
+        <iframe src="https://cal.com/omare152?embed=true" style="width:100%;height:100%;min-height:720px;border:0;" loading="lazy" title="Book a class with Omar"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="delf">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Préparation DELF</h2>
+      <span class="section-num mono">04 / ONE-OFF COURSES</span>
+    </div>
+    <p class="mono" style="font-size:12.5px;color:var(--ink-soft);margin:-16px 0 28px;max-width:60ch;">Self-contained prep packages for the official DELF exam — no ongoing commitment. Each includes recorded material plus one live review session.</p>
+    <div class="shop-grid">
+      <div class="panel shop-card">
+        <span class="shop-level">A2</span>
+        <h4>DELF A2 prep</h4>
+        <p>Foundations pack covering everyday exchanges, simple past tense, and mock oral exam practice.</p>
+        <div class="shop-price mono"><b>£75</b></div>
+        <a class="shop-buy" href="#" data-stripe-link="A2"><!-- EDIT: point to your Stripe Payment Link -->Acheter</a>
+      </div>
+      <div class="panel shop-card">
+        <span class="shop-level">B1</span>
+        <h4>DELF B1 prep</h4>
+        <p>Argument-building, expressing opinions, and the full four-section exam format walked through.</p>
+        <div class="shop-price mono"><b>£95</b></div>
+        <a class="shop-buy" href="#" data-stripe-link="B1">Acheter</a>
+      </div>
+      <div class="panel shop-card">
+        <span class="shop-level">B2</span>
+        <h4>DELF B2 prep</h4>
+        <p>Debate technique, nuanced register, and timed practice papers with detailed written feedback.</p>
+        <div class="shop-price mono"><b>£120</b></div>
+        <a class="shop-buy" href="#" data-stripe-link="B2">Acheter</a>
+      </div>
+      <div class="panel shop-card">
+        <span class="shop-level">C1</span>
+        <h4>DELF C1 prep</h4>
+        <p>Academic and professional register, complex texts, and full-length exam simulation with review.</p>
+        <div class="shop-price mono"><b>£140</b></div>
+        <a class="shop-buy" href="#" data-stripe-link="C1">Acheter</a>
+      </div>
+    </div>
+    <p class="mono" style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.7;">
+      <!-- EDIT: setup notes for the payment flow -->
+      Setup: create a free Stripe account, then a Payment Link for each package under Stripe → Payment Links (no code needed). Paste each resulting URL into the matching href="#" above. Stripe emails the buyer a receipt automatically; you'll want to follow up manually with their materials and booking link for the review session.
+    </p>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Témoignages</h2>
+      <span class="section-num mono">05 / AVIS ÉLÈVES</span>
+    </div>
+    <div class="testi-carousel">
+      <button class="dial-arrow testi-arrow" id="testiPrev" aria-label="Previous testimonial" type="button">←</button>
+      <div class="testi-track-wrap">
+        <div class="testi-track" id="testiTrack">
+          <div class="panel testi-card">
+            <!-- EDIT: replace with a real student quote once you have one -->
+            <p class="testi-quote">"Quote goes here — swap in a real student testimonial."</p>
+            <span class="testi-name mono">— Name, level</span>
+          </div>
+          <div class="panel testi-card">
+            <p class="testi-quote">"Quote goes here — swap in a real student testimonial."</p>
+            <span class="testi-name mono">— Name, level</span>
+          </div>
+          <div class="panel testi-card">
+            <p class="testi-quote">"Quote goes here — swap in a real student testimonial."</p>
+            <span class="testi-name mono">— Name, level</span>
+          </div>
+        </div>
+      </div>
+      <button class="dial-arrow testi-arrow" id="testiNext" aria-label="Next testimonial" type="button">→</button>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span class="mono">FR.01 — Cours de Français · omar-elghazaly@hotmail.com</span>
+    <span class="mono">© 2026 — made for group & one-to-one French lessons</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var toggle = document.getElementById('navToggle');
+  var menu = document.getElementById('navMenu');
+  if(!toggle || !menu) return;
+  toggle.addEventListener('click', function(){
+    var isOpen = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+
+(function(){
+  var svg = document.getElementById('cefr-dial');
+  var needle = document.getElementById('dial-needle');
+  var label = document.getElementById('dial-label');
+  var descLevelEl = document.getElementById('dialDescLevel');
+  var descTextEl = document.getElementById('dialDescText');
+  var order = ['A1','A2','B1','B2','C1','C2'];
+  var angles = {A1:0,A2:60,B1:120,B2:180,C1:240,C2:300};
+  var levelInfo = {
+    A1:{title:'A1 — Beginner', text:'Introduce yourself, order food and drinks, ask simple directions, and handle short, predictable exchanges.'},
+    A2:{title:'A2 — Elementary', text:'Talk about daily routines, shopping and travel; understand short, simple texts and messages.'},
+    B1:{title:'B1 — Intermediate', text:'Hold your own in most everyday situations, describe experiences and plans, and follow the main points of clear speech.'},
+    B2:{title:'B2 — Upper-Intermediate', text:'Discuss familiar and abstract topics with fluency, follow native-speed conversation, and write clear, detailed texts.'},
+    C1:{title:'C1 — Advanced', text:'Express yourself fluently and spontaneously on complex subjects, and use French confidently at work or university.'},
+    C2:{title:'C2 — Mastery', text:'Understand virtually everything you hear or read, and express nuance and subtlety with near-native precision.'}
+  };
+  var cx = 130, cy = 130;
+  var current = 'B1';
+
+  function updateDesc(lvl){
+    var info = levelInfo[lvl];
+    if(!info) return;
+    if(descLevelEl) descLevelEl.textContent = info.title;
+    if(descTextEl) descTextEl.textContent = info.text;
+  }
+
+  function nearestLevel(angle){
+    var best = order[0], bestDiff = 361;
+    order.forEach(function(lvl){
+      var diff = Math.abs(angle - angles[lvl]);
+      diff = Math.min(diff, 360 - diff);
+      if(diff < bestDiff){ bestDiff = diff; best = lvl; }
+    });
+    return best;
+  }
+
+  function setNeedle(angle, lvl){
+    needle.setAttribute('transform', 'rotate(' + angle + ' ' + cx + ' ' + cy + ')');
+    if(lvl && lvl !== current){
+      current = lvl;
+      label.textContent = lvl;
+      updateDesc(lvl);
+    }
+  }
+
+  function angleFromEvent(evt){
+    var rect = svg.getBoundingClientRect();
+    var scale = 260 / rect.width;
+    var px = (evt.clientX - rect.left) * scale;
+    var py = (evt.clientY - rect.top) * scale;
+    var dx = px - cx, dy = py - cy;
+    var angle = Math.atan2(dx, -dy) * (180 / Math.PI);
+    if(angle < 0) angle += 360;
+    return angle;
+  }
+
+  function stepLevel(dir){
+    var idx = order.indexOf(current);
+    idx = (idx + dir + order.length) % order.length;
+    setNeedle(angles[order[idx]], order[idx]);
+  }
+
+  var prevBtn = document.getElementById('dialPrev');
+  var nextBtn = document.getElementById('dialNext');
+  if(prevBtn) prevBtn.addEventListener('click', function(){ stepLevel(-1); });
+  if(nextBtn) nextBtn.addEventListener('click', function(){ stepLevel(1); });
+
+  updateDesc(current);
+
+  svg.addEventListener('mousemove', function(evt){
+    var angle = angleFromEvent(evt);
+    setNeedle(angle, nearestLevel(angle));
+  });
+
+  svg.addEventListener('mouseleave', function(){
+    setNeedle(angles[current], current);
+  });
+})();
+
+(function(){
+  var track = document.getElementById('testiTrack');
+  var prev = document.getElementById('testiPrev');
+  var next = document.getElementById('testiNext');
+  var dotsWrap = document.getElementById('testiDots');
+  if(!track || !dotsWrap) return;
+
+  var cards = track.children;
+  var count = cards.length;
+  var idx = 0;
+
+  for(var d = 0; d < count; d++){
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'testi-dot';
+    dot.setAttribute('aria-label', 'Go to testimonial ' + (d + 1));
+    (function(n){
+      dot.addEventListener('click', function(){ goTo(n); });
+    })(d);
+    dotsWrap.appendChild(dot);
+  }
+  var dots = dotsWrap.children;
+
+  function render(){
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    for(var k = 0; k < dots.length; k++){
+      dots[k].classList.toggle('active', k === idx);
+    }
+  }
+  function goTo(n){
+    idx = (n + count) % count;
+    render();
+  }
+
+  if(prev) prev.addEventListener('click', function(){ goTo(idx - 1); });
+  if(next) next.addEventListener('click', function(){ goTo(idx + 1); });
+
+  render();
+})();
+</script>
+</body>
+</html>
