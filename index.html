@@ -203,7 +203,7 @@
   .dial-panel{padding:32px;text-align:center;}
   .dial-head{margin-bottom:20px;}
   .dial-head h3{font-size:19px;margin-top:6px;}
-  #cefr-dial{touch-action:none;}
+  #cefr-dial{touch-action:none;user-select:none;-webkit-user-select:none;}
   .dial-hit{cursor:pointer;}
   .dial-hit:focus-visible circle{stroke:var(--accent);stroke-width:2;}
   .dial-hit:focus-visible text{fill:var(--accent);}
@@ -685,6 +685,15 @@
   };
   var cx = 130, cy = 130;
   var current = 'B1';
+  var needleRotation = 120;
+
+  function rotateNeedleTo(targetAngle){
+    var diff = (targetAngle - needleRotation) % 360;
+    if(diff < -180) diff += 360;
+    if(diff > 180) diff -= 360;
+    needleRotation += diff;
+    needle.setAttribute('transform', 'rotate(' + needleRotation + ' ' + cx + ' ' + cy + ')');
+  }
 
   function updateDesc(lvl){
     var info = levelInfo[lvl];
@@ -704,7 +713,7 @@
   }
 
   function setNeedle(angle, lvl){
-    needle.setAttribute('transform', 'rotate(' + angle + ' ' + cx + ' ' + cy + ')');
+    rotateNeedleTo(angle);
     if(lvl && lvl !== current){
       current = lvl;
       label.textContent = lvl;
