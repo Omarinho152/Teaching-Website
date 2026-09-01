@@ -203,6 +203,10 @@
   .dial-panel{padding:32px;text-align:center;}
   .dial-head{margin-bottom:20px;}
   .dial-head h3{font-size:19px;margin-top:6px;}
+  #cefr-dial{touch-action:none;}
+  .dial-hit{cursor:pointer;}
+  .dial-hit:focus-visible circle{stroke:var(--accent);stroke-width:2;}
+  .dial-hit:focus-visible text{fill:var(--accent);}
   .dial-level-nav{display:flex;align-items:center;gap:12px;margin-top:18px;}
   .dial-caption{margin:0;font-size:12px;color:var(--ink-soft);flex:1;text-align:left;}
   .dial-caption b{color:var(--ink);}
@@ -213,6 +217,11 @@
     transition:background .15s ease, color .15s ease;
   }
   .dial-arrow:hover{background:var(--ink);color:var(--bg);}
+  @media (pointer:coarse){
+    .dial-arrow, .testi-arrow{width:44px;height:44px;font-size:16px;}
+    .dial-hit circle{r:28;}
+    .testi-dot{width:12px;height:12px;}
+  }
   .dial-desc{
     margin-top:18px;padding:16px 18px;text-align:left;
     background:var(--panel-dim);border:1px solid var(--line);border-radius:var(--radius);
@@ -429,13 +438,31 @@
       </div>
       <svg viewBox="0 0 260 260" width="100%" style="max-width:320px;" id="cefr-dial">
         <circle cx="130" cy="130" r="112" fill="none" stroke="#C6C2B3" stroke-width="1"/>
-        <g font-family="IBM Plex Mono" font-size="12" fill="#5C5A52" style="cursor:pointer;">
-          <text class="dial-tick" data-angle="0"   data-label="A1" x="130"   y="40.7" text-anchor="middle">A1</text>
-          <text class="dial-tick" data-angle="60"  data-label="A2" x="211.7" y="87.9" text-anchor="middle">A2</text>
-          <text class="dial-tick" data-angle="120" data-label="B1" x="211.7" y="182.2" text-anchor="middle">B1</text>
-          <text class="dial-tick" data-angle="180" data-label="B2" x="130"   y="229.3" text-anchor="middle">B2</text>
-          <text class="dial-tick" data-angle="240" data-label="C1" x="48.3"  y="182.2" text-anchor="middle">C1</text>
-          <text class="dial-tick" data-angle="300" data-label="C2" x="48.3"  y="92.9" text-anchor="middle">C2</text>
+        <g font-family="IBM Plex Mono" font-size="12" fill="#5C5A52">
+          <g class="dial-hit" data-label="A1" tabindex="0" role="button" aria-label="Set level to A1">
+            <circle cx="130" cy="40.7" r="24" fill="transparent"/>
+            <text class="dial-tick" x="130" y="40.7" text-anchor="middle">A1</text>
+          </g>
+          <g class="dial-hit" data-label="A2" tabindex="0" role="button" aria-label="Set level to A2">
+            <circle cx="211.7" cy="87.9" r="24" fill="transparent"/>
+            <text class="dial-tick" x="211.7" y="87.9" text-anchor="middle">A2</text>
+          </g>
+          <g class="dial-hit" data-label="B1" tabindex="0" role="button" aria-label="Set level to B1">
+            <circle cx="211.7" cy="182.2" r="24" fill="transparent"/>
+            <text class="dial-tick" x="211.7" y="182.2" text-anchor="middle">B1</text>
+          </g>
+          <g class="dial-hit" data-label="B2" tabindex="0" role="button" aria-label="Set level to B2">
+            <circle cx="130" cy="229.3" r="24" fill="transparent"/>
+            <text class="dial-tick" x="130" y="229.3" text-anchor="middle">B2</text>
+          </g>
+          <g class="dial-hit" data-label="C1" tabindex="0" role="button" aria-label="Set level to C1">
+            <circle cx="48.3" cy="182.2" r="24" fill="transparent"/>
+            <text class="dial-tick" x="48.3" y="182.2" text-anchor="middle">C1</text>
+          </g>
+          <g class="dial-hit" data-label="C2" tabindex="0" role="button" aria-label="Set level to C2">
+            <circle cx="48.3" cy="92.9" r="24" fill="transparent"/>
+            <text class="dial-tick" x="48.3" y="92.9" text-anchor="middle">C2</text>
+          </g>
         </g>
         <line id="dial-needle" x1="130" y1="130" x2="130" y2="45" stroke="#FF4310" stroke-width="3" stroke-linecap="round" transform="rotate(120 130 130)" style="transition:transform .12s linear;"/>
         <circle cx="130" cy="130" r="40" fill="#1B1A17"/>
@@ -444,7 +471,7 @@
 
       <div class="dial-level-nav">
         <button class="dial-arrow" id="dialPrev" aria-label="Previous level" type="button">←</button>
-        <p class="dial-caption">Curriculum tracks the <b>CEFR scale</b>, A1 through C2 — hover the dial or use the arrows.</p>
+        <p class="dial-caption">Curriculum tracks the <b>CEFR scale</b>, A1 through C2 — drag the dial, tap a level, or use the arrows.</p>
         <button class="dial-arrow" id="dialNext" aria-label="Next level" type="button">→</button>
       </div>
 
@@ -717,6 +744,42 @@
   svg.addEventListener('mouseleave', function(){
     setNeedle(angles[current], current);
   });
+
+  var dialHits = svg.querySelectorAll('.dial-hit');
+  dialHits.forEach(function(hit){
+    var lvl = hit.getAttribute('data-label');
+    hit.addEventListener('click', function(){
+      setNeedle(angles[lvl], lvl);
+    });
+    hit.addEventListener('keydown', function(evt){
+      if(evt.key === 'Enter' || evt.key === ' '){
+        evt.preventDefault();
+        setNeedle(angles[lvl], lvl);
+      }
+    });
+  });
+
+  var dragging = false;
+  svg.addEventListener('pointerdown', function(evt){
+    if(evt.pointerType === 'mouse') return;
+    dragging = true;
+    svg.setPointerCapture(evt.pointerId);
+    var angle = angleFromEvent(evt);
+    setNeedle(angle, nearestLevel(angle));
+  });
+  svg.addEventListener('pointermove', function(evt){
+    if(!dragging || evt.pointerType === 'mouse') return;
+    evt.preventDefault();
+    var angle = angleFromEvent(evt);
+    setNeedle(angle, nearestLevel(angle));
+  });
+  function endDrag(evt){
+    if(evt.pointerType === 'mouse') return;
+    dragging = false;
+    setNeedle(angles[current], current);
+  }
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointercancel', endDrag);
 })();
 
 (function(){
