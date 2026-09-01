@@ -144,6 +144,18 @@
     font-size:11px;font-weight:700;
     font-family:'Space Grotesk',sans-serif;
   }
+  .navbar-right{display:flex;align-items:center;gap:20px;}
+  .lang-toggle{
+    display:flex;border:1px solid var(--ink);border-radius:20px;overflow:hidden;
+    flex-shrink:0;
+  }
+  .lang-btn{
+    background:transparent;border:none;padding:6px 12px;cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.03em;
+    color:var(--ink-soft);transition:background .15s ease,color .15s ease;
+  }
+  .lang-btn:hover:not(.active){background:var(--panel);}
+  .lang-btn.active{background:var(--ink);color:var(--bg);}
   nav{position:relative;}
   nav ul{
     display:flex;gap:28px;list-style:none;margin:0;padding:0;
@@ -414,25 +426,31 @@
 
 <header>
   <div class="wrap navbar">
-    <div class="brand"><span class="brand-mark">FR</span> COURS&nbsp;DE&nbsp;FRANÇAIS — MODEL&nbsp;FR.01</div>
-    <nav>
-      <ul id="navMenu">
-        <li><a href="#about">À propos</a></li>
-        <li><a href="#classes">Cours</a></li>
-        <li><a href="#book">Réserver</a></li>
-        <li><a href="#delf">Préparation DELF</a></li>
-      </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
+    <div class="brand"><span class="brand-mark">FR</span> <span data-i18n="brand">COURS&nbsp;DE&nbsp;FRANÇAIS — MODEL&nbsp;FR.01</span></div>
+    <div class="navbar-right">
+      <nav>
+        <ul id="navMenu">
+          <li><a href="#about" data-i18n="navAbout">À propos</a></li>
+          <li><a href="#classes" data-i18n="navClasses">Cours</a></li>
+          <li><a href="#book" data-i18n="navBook">Réserver</a></li>
+          <li><a href="#delf" data-i18n="navDelf">Préparation DELF</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="franglish" aria-pressed="true">FR</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <section class="hero" style="border-top:none;padding-top:88px;">
   <div class="wrap" style="display:contents;">
     <div class="hero-copy">
-      <p class="eyebrow">Native speaker · basé en Belgique depuis 2008</p>
+      <p class="eyebrow" data-i18n="heroEyebrow">Native speaker · basé en Belgique depuis 2008</p>
       <h1>Learn French<br>the way it's<br><span>actually spoken.</span></h1>
       <p class="lede">One-to-one and small group lessons with a native French speaker and experienced teacher. Structured around the CEFR framework — built around how you'll actually speak, not just how it's written down.</p>
       <div class="cta-row">
@@ -496,14 +514,14 @@
 <section id="about">
   <div class="wrap">
     <div class="section-head">
-      <h2>À propos</h2>
-      <span class="section-num mono">01 / ENSEIGNANT</span>
+      <h2 data-i18n="aboutH2">À propos</h2>
+      <span class="section-num mono" data-i18n="aboutNum">01 / ENSEIGNANT</span>
     </div>
     <div class="about-grid">
       <div class="photo-frame"><img src="omar-photo.jpg" alt="Omar, French teacher"></div>
       <div class="about-body">
         <!-- EDIT: swap "Omar" for whatever name/handle you want on the public site -->
-        <p><b>Bonjour, je m'appelle Omar.</b> French is my first language — I've lived in Belgium since 2008, so it's not just a language I studied, it's the one I think, argue and joke in.</p>
+        <p><b data-i18n="bioIntro">Bonjour, je m'appelle Omar.</b> French is my first language — I've lived in Belgium since 2008, so it's not just a language I studied, it's the one I think, argue and joke in.</p>
         <p>Before turning to French teaching, I spent several years teaching maths and physics at GCSE and A-level, so lesson planning, pacing and explaining things three different ways until one clicks is already second nature. I bring that same structure to French: clear levels, clear goals, and homework that's actually useful.</p>
         <p>I focus on getting students speaking early rather than drilling grammar in isolation, while still being rigorous about the fundamentals — verb conjugation, gender, the sounds that don't exist in English — that trip most learners up.</p>
         <div class="spec-list">
@@ -522,12 +540,12 @@
 <section id="classes">
   <div class="wrap">
     <div class="section-head">
-      <h2>Les cours</h2>
+      <h2 data-i18n="classesH2">Les cours</h2>
       <span class="section-num mono">02 / FORMATS</span>
     </div>
     <div class="class-grid">
       <div class="panel class-card">
-        <span class="class-tag tag-group">Groupe</span>
+        <span class="class-tag tag-group" data-i18n="tagGroup">Groupe</span>
         <h3>Small group lessons</h3>
         <p class="price"><b>£18</b> / person / hour</p>
         <div class="class-specs">
@@ -539,7 +557,7 @@
         <a href="#book" class="btn btn-ghost" style="text-align:center;">Book a group slot</a>
       </div>
       <div class="panel class-card">
-        <span class="class-tag tag-private">Privé</span>
+        <span class="class-tag tag-private" data-i18n="tagPrivate">Privé</span>
         <h3>One-to-one lessons</h3>
         <p class="price"><b>£40</b> / hour</p>
         <div class="class-specs">
@@ -558,8 +576,8 @@
 <section id="book">
   <div class="wrap-wide">
     <div class="section-head">
-      <h2>Réserver un cours</h2>
-      <span class="section-num mono">03 / CALENDRIER</span>
+      <h2 data-i18n="bookH2">Réserver un cours</h2>
+      <span class="section-num mono" data-i18n="bookNum">03 / CALENDRIER</span>
     </div>
     <div class="book-grid">
       <div class="panel book-info">
@@ -581,7 +599,7 @@
 <section id="delf">
   <div class="wrap">
     <div class="section-head">
-      <h2>Préparation DELF</h2>
+      <h2 data-i18n="delfH2">Préparation DELF</h2>
       <span class="section-num mono">04 / ONE-OFF COURSES</span>
     </div>
     <p class="mono" style="font-size:12.5px;color:var(--ink-soft);margin:-16px 0 28px;max-width:60ch;">Self-contained prep packages for the official DELF exam — no ongoing commitment. Each includes recorded material plus one live review session.</p>
@@ -591,28 +609,28 @@
         <h4>DELF A2 prep</h4>
         <p>Foundations pack covering everyday exchanges, simple past tense, and mock oral exam practice.</p>
         <div class="shop-price mono"><b>£75</b></div>
-        <a class="shop-buy" href="#" data-stripe-link="A2"><!-- EDIT: point to your Stripe Payment Link -->Acheter</a>
+        <a class="shop-buy" href="#" data-stripe-link="A2" data-i18n="buy"><!-- EDIT: point to your Stripe Payment Link -->Acheter</a>
       </div>
       <div class="panel shop-card">
         <span class="shop-level">B1</span>
         <h4>DELF B1 prep</h4>
         <p>Argument-building, expressing opinions, and the full four-section exam format walked through.</p>
         <div class="shop-price mono"><b>£95</b></div>
-        <a class="shop-buy" href="#" data-stripe-link="B1">Acheter</a>
+        <a class="shop-buy" href="#" data-stripe-link="B1" data-i18n="buy">Acheter</a>
       </div>
       <div class="panel shop-card">
         <span class="shop-level">B2</span>
         <h4>DELF B2 prep</h4>
         <p>Debate technique, nuanced register, and timed practice papers with detailed written feedback.</p>
         <div class="shop-price mono"><b>£120</b></div>
-        <a class="shop-buy" href="#" data-stripe-link="B2">Acheter</a>
+        <a class="shop-buy" href="#" data-stripe-link="B2" data-i18n="buy">Acheter</a>
       </div>
       <div class="panel shop-card">
         <span class="shop-level">C1</span>
         <h4>DELF C1 prep</h4>
         <p>Academic and professional register, complex texts, and full-length exam simulation with review.</p>
         <div class="shop-price mono"><b>£140</b></div>
-        <a class="shop-buy" href="#" data-stripe-link="C1">Acheter</a>
+        <a class="shop-buy" href="#" data-stripe-link="C1" data-i18n="buy">Acheter</a>
       </div>
     </div>
     <p class="mono" style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.7;">
@@ -625,8 +643,8 @@
 <section id="testimonials">
   <div class="wrap">
     <div class="section-head">
-      <h2>Témoignages</h2>
-      <span class="section-num mono">05 / AVIS ÉLÈVES</span>
+      <h2 data-i18n="testiH2">Témoignages</h2>
+      <span class="section-num mono" data-i18n="testiNum">05 / AVIS ÉLÈVES</span>
     </div>
     <div class="testi-carousel">
       <button class="dial-arrow testi-arrow" id="testiPrev" aria-label="Previous testimonial" type="button">←</button>
@@ -655,12 +673,91 @@
 
 <footer>
   <div class="wrap footer-row">
-    <span class="mono">FR.01 — Cours de Français · omar-elghazaly@hotmail.com</span>
+    <span class="mono"><span data-i18n="footerBrand">FR.01 — Cours de Français</span> · omar-elghazaly@hotmail.com</span>
     <span class="mono">© 2026 — made for group & one-to-one French lessons</span>
   </div>
 </footer>
 
 <script>
+(function(){
+  var dict = {
+    franglish: {
+      brand: 'COURS&nbsp;DE&nbsp;FRANÇAIS — MODEL&nbsp;FR.01',
+      navAbout: 'À propos',
+      navClasses: 'Cours',
+      navBook: 'Réserver',
+      navDelf: 'Préparation DELF',
+      heroEyebrow: 'Native speaker · basé en Belgique depuis 2008',
+      aboutH2: 'À propos',
+      aboutNum: '01 / ENSEIGNANT',
+      bioIntro: "Bonjour, je m'appelle Omar.",
+      classesH2: 'Les cours',
+      tagGroup: 'Groupe',
+      tagPrivate: 'Privé',
+      bookH2: 'Réserver un cours',
+      bookNum: '03 / CALENDRIER',
+      delfH2: 'Préparation DELF',
+      buy: 'Acheter',
+      testiH2: 'Témoignages',
+      testiNum: '05 / AVIS ÉLÈVES',
+      footerBrand: 'FR.01 — Cours de Français',
+      title: 'FR.01 — Cours de Français'
+    },
+    en: {
+      brand: 'FRENCH&nbsp;LESSONS — MODEL&nbsp;FR.01',
+      navAbout: 'About',
+      navClasses: 'Classes',
+      navBook: 'Book',
+      navDelf: 'DELF Prep',
+      heroEyebrow: 'Native speaker · based in Belgium since 2008',
+      aboutH2: 'About',
+      aboutNum: '01 / TEACHER',
+      bioIntro: "Hi, I'm Omar.",
+      classesH2: 'Classes',
+      tagGroup: 'Group',
+      tagPrivate: 'Private',
+      bookH2: 'Book a class',
+      bookNum: '03 / CALENDAR',
+      delfH2: 'DELF Prep',
+      buy: 'Buy',
+      testiH2: 'Testimonials',
+      testiNum: '05 / STUDENT REVIEWS',
+      footerBrand: 'FR.01 — French Lessons',
+      title: 'FR.01 — French Lessons'
+    }
+  };
+  var STORAGE_KEY = 'fr01-lang';
+  var langBtns = document.querySelectorAll('.lang-btn');
+
+  function applyLang(lang){
+    var t = dict[lang] ? lang : 'franglish';
+    t = dict[t];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if(t[key] === undefined) return;
+      if(key === 'brand'){ el.innerHTML = t[key]; }
+      else { el.textContent = t[key]; }
+    });
+    if(t.title) document.title = t.title;
+    langBtns.forEach(function(btn){
+      var active = btn.getAttribute('data-lang') === (dict[lang] ? lang : 'franglish');
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    try { localStorage.setItem(STORAGE_KEY, dict[lang] ? lang : 'franglish'); } catch(e){}
+  }
+
+  langBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      applyLang(btn.getAttribute('data-lang'));
+    });
+  });
+
+  var saved = 'franglish';
+  try { saved = localStorage.getItem(STORAGE_KEY) || 'franglish'; } catch(e){}
+  applyLang(saved);
+})();
+
 (function(){
   var toggle = document.getElementById('navToggle');
   var menu = document.getElementById('navMenu');
